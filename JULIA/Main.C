@@ -15,7 +15,7 @@
 #define W 1200
 #define H 1200
 
-#define RENDER_FRAMES 250
+#define RENDER_FRAMES 90
 #define GET_DWORD_COLOR(R, G, B) ((R) << 16 | (G) << 8 | (B))
 
 typedef unsigned char byte;
@@ -26,12 +26,21 @@ static int RENDER_START = 1;
 static dword Frame[W * H];
 static dword JuliaMas[W * H];
 static INT rendered = 0;
+
 static DBL x0 = -2.0, y0 = -2.0, x1 = 2.0, y1 = 2.0;
 static DBL xStep0, yStep0, xStep1, yStep1;
 
 static char RenderFileName[250];
 
-static DBL finX0 = 0.225000, finY0 = -0.635000, finX1 = 0.295000, finY1 = -0.577500;
+/* static DBL finX0 = -2.0, finY0 = -2.0, finX1 = 2.0, finY1 = 2.0; */
+
+static DBL finX0 = 0.363333, finY0 = 0.586667;
+static DBL finX1 = 0.366667, finY1 = 0.590000;
+
+//static DBL finX0 = -1.083333, finY0 = -0.266667;
+//static DBL finX1 = -1.063333, finY1 = -0.263333;
+//static DBL finX0 = 0.225000, finY0 = -0.635000, finX1 = 0.295000, finY1 = -0.577500;
+//static DBL finX0 = -1.390000, finY0 = -0.640000, finX1 = -1.326667, finY1 = -0.590000;
 //static DBL finX0 = -0.775000, finY0 = -0.105000, finX1 = -0.785000, finY1 = -0.115000;
 
 static DBL Zoom = 1, xPos = 0, yPos = 0;
@@ -166,6 +175,7 @@ void Display( void )
 		Sleep(500);
 		printf("2\n");
 		Sleep(500);
+		   
 		printf("1\n");
 
 		opened = 1;
@@ -198,41 +208,46 @@ void Display( void )
 
 void Keyboard(byte key, int x, int y)
 {
+  static int counter = 0;
   switch (key)
   {
   case ' ':
-    printf("%f, %f\n", convertX(x), convertY(y));
-    break;
+    if (counter % 2 == 0)
+	  printf("static DBL finX0 = %f, finY0 = %f;\n", convertX(x), convertY(y));
+	else 
+	  printf("static DBL finX1 = %f, finY1 = %f;\n", convertX(x), convertY(y));
+	counter++;					
+	break;
   case 'q':
   case 'Q':
-    exit(0);
+	exit(0);
 	break;
   case '=':
   case '+':
-    Zoom += 1;
+	Zoom += 1;
 	break;
   case '-':
   case '_':
-    Zoom -= 1;
-    break;
+	Zoom -= 1;
+	break;
   case 'A':
   case 'a':
-    xPos += 2;
+	xPos += 2;
 	break;
   case 'D':
   case 'd':
-    xPos -= 2;
-    break;
+	xPos -= 2;
+	break;
   case 'W':
   case 'w':
-    yPos += 2;
-    break;
+	yPos += 2;
+	break;
   case 'S':
   case 's':
-    yPos -= 2;
-    break;
+	yPos -= 2;
+	break;
   default:
-    break;
+	break;
   }
 }
 
@@ -252,7 +267,7 @@ void main( void )
   printf("Choose mode: 1 - render, 2 - play\n");
   switch(getchar())
   {
-    case '1':
+	case '1':
 	  printf("Enter a name for render file...\n");
 	  scanf("%s", &RenderFileName);
 
